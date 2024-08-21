@@ -6,7 +6,7 @@ import googletrans
 from discord import Embed
 import asyncio  # Import asyncio for sleep function
 from keep_alive import keep_alive
-
+keep_alive() 
 translator = googletrans.Translator()
 
 # Create a dictionary of flag emojis and their corresponding language codes
@@ -106,5 +106,4 @@ async def on_reaction_add(reaction, user):
             print(f"Error translating message: {e}")
 
 # Run the bot
-keep_alive() 
 bot.run(TOKEN)
