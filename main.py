@@ -60,9 +60,7 @@ flag_emoji_dict = {
 }
 
 # For a more secure, we loaded the .env file and assign the token value to a variable 
-load_dotenv(".env")
-TOKEN = os.getenv("TOKEN")
-
+TOKEN = os.getenv("DISCORD_TOKEN")
 # Intents are permissions for the bot that are enabled based on the features necessary to run the bot.
 intents = discord.Intents.all()
 
@@ -107,4 +105,5 @@ async def on_reaction_add(reaction, user):
             print(f"Error translating message: {e}")
 
 # Run the bot
+keep_alive() 
 bot.run(TOKEN)
