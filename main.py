@@ -5,6 +5,7 @@ import os
 import googletrans
 from discord import Embed
 import asyncio  # Import asyncio for sleep function
+from keep_alive import keep_alive
 
 translator = googletrans.Translator()
 
