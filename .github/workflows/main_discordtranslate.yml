@@ -31,7 +31,7 @@ jobs:
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
-          pip install discord googletrans aiohttp
+          pip install discord googletrans aiohttp azure-functions
 
       - name: Run main.py (Optional, for testing purposes)
         run: |
