@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # Path
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # Path to your function app project
   PYTHON_VERSION: '3.11' # Python version to use
 
 jobs:
@@ -30,24 +30,16 @@ jobs:
       - name: Install dependencies
         run: |
           source venv/bin/activate
-          pip install -r requirements.txt
-          pip install discord googletrans aiohttp azure-functions
+          pip install -r MyFunction/requirements.txt
 
-      - name: Run main.py (Optional, for testing purposes)
-        run: |
-          source venv/bin/activate
-          python main.py
-
-  - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+      - name: Zip artifact for deployment
+        run: zip -r release.zip MyFunction -x 'MyFunction/venv/*'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,28 +48,30 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-function.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
-	@@ -63,16 +63,16 @@ jobs:
+        uses: actions/download-artifact@v4
+        with:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip     
-        
+        run: unzip release.zip
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_859B9CBB4FF14DADA13ACA3EBAD75187 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5D206886141D4E2CA0E5963DE340E62B }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_888BA0BAF7554571BE62C5E0453A01C6 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         id: deploy-to-function
         with:
-	@@ -81,4 +81,3 @@ jobs:
+          app-name: 'discordtranslate'
+          slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
