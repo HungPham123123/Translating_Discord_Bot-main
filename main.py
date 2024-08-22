@@ -81,7 +81,7 @@ async def on_reaction_add(reaction, user):
             detected_lang = translator.detect(message.content)
             translated_message = translator.translate(message.content, dest=lang_code).text
             pronunciation_message = translator.translate(message.content, dest=lang_code).pronunciation
-            
+
             print(f"Detected language: {detected_lang.lang}, Confidence: {detected_lang.confidence}")
 
             confidence = detected_lang.confidence if detected_lang.confidence is not None else 0
@@ -97,5 +97,7 @@ async def on_reaction_add(reaction, user):
         except Exception as e:
             print(f"Error translating message: {e}")
 
-# Run the bot
-bot.run(TOKEN)
+# Azure Function entry point
+async def main(req: func.HttpRequest) -> func.HttpResponse:
+    await bot.start(TOKEN)
+    return func.HttpResponse("Bot is running", status_code=200)
