@@ -4,11 +4,10 @@ from dotenv import load_dotenv
 import os
 import googletrans
 from discord import Embed
-import asyncio  # Import asyncio for sleep function
+import asyncio
 
 translator = googletrans.Translator()
 
-# Create a dictionary of flag emojis and their corresponding language codes
 flag_emoji_dict = {
     "🇺🇸": "en",
     "🇩🇪": "de",
