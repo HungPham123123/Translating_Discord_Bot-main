@@ -5,7 +5,6 @@ import os
 import googletrans
 from discord import Embed
 import asyncio
-from keep_alive import keep_alive
 
 # Load environment variables from .env file
 load_dotenv()
