@@ -1,11 +1,12 @@
+import logging
+import azure.functions as func
 import discord
-from discord.ext import tasks, commands
+from discord.ext import commands
 from dotenv import load_dotenv
 import os
 import googletrans
 from discord import Embed
 import asyncio
-import azure.functions as func
 
 # Load environment variables from .env file
 load_dotenv()
@@ -71,7 +72,10 @@ intents = discord.Intents.all()
 prefix = './'
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 
-# Event handler
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user.name}')
+
 @bot.event
 async def on_reaction_add(reaction, user):
     if reaction.emoji in flag_emoji_dict:
@@ -98,4 +102,10 @@ async def on_reaction_add(reaction, user):
         except Exception as e:
             print(f"Error translating message: {e}")
 
-bot.run(TOKEN)
+def main(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Processing an HTTP request.')
+
+    # Start the bot (note: this is just a placeholder, you'll need to run the bot differently in Azure)
+    bot.run(TOKEN)
+
+    return func.HttpResponse("Bot is running!", status_code=200)
