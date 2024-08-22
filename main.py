@@ -98,7 +98,4 @@ async def on_reaction_add(reaction, user):
         except Exception as e:
             print(f"Error translating message: {e}")
 
-# Azure Function entry point
-async def main(req: func.HttpRequest) -> func.HttpResponse:
-    await bot.start(TOKEN)
-    return func.HttpResponse("Bot is running", status_code=200)
+bot.run(TOKEN)
