@@ -5,6 +5,7 @@ import os
 import googletrans
 from discord import Embed
 import asyncio
+import azure.functions as func
 
 # Load environment variables from .env file
 load_dotenv()
